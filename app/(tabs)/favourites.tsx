@@ -8,14 +8,12 @@ import { create } from "zustand";
 import { useGameStore } from "../local/game_store";
 import { useEffect } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
-import { useNavigation } from "expo-router";
 
 export default function HomeScreen() {
   const getGames = useGameStore((state) => state.fetchGames);
   const likeGame = useGameStore((state) => state.likeGame);
   const articles = useGameStore((state) => state.games);
   const status = useGameStore((state) => state.state);
-  const navigation = useNavigation();
 
   useEffect(() => {
     getGames();
@@ -23,7 +21,7 @@ export default function HomeScreen() {
 
   return (
     <FlatList
-      data={articles}
+      data={articles.filter((game) => game.liked)}
       renderItem={({ item }) => (
         <ThemedView style={styles.stepContainer}>
           <ThemedView style={styles.titleContainer}>
@@ -34,17 +32,7 @@ export default function HomeScreen() {
             </ThemedView>
           </ThemedView>
           <ThemedView style={styles.titleContainer}>
-            <Button
-              title="Details"
-              onPress={
-                // navigae to details screen
-                () =>
-                  navigation.navigate("details", {
-                    id: item.id,
-                    title: item.title,
-                  })
-              }
-            />
+            <Button title="Details" onPress={() => console.log("Details")} />
             <ThemedView>
               <TabBarIcon
                 style={{ alignSelf: "flex-end" }}
